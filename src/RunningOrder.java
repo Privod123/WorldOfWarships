@@ -32,9 +32,13 @@ public class RunningOrder {
                     }
                     // if проверяет наличие попадания
                     if ( mainScreen.isSuccesHitPlayer1()){
-                        String rezultatHit = playerMove.playerTurnResultat(mainScreen.getFullNameButtonSuccesHit());
+                        String rezultatHit = playerMove.playerTurnResultat(mainScreen.getFullNameButtonSuccesHit(),
+                                                                                    mainScreen.getListButtonGamer2());
                         // if проверяет был затоплен корабль или нет
-                        if (!rezultatHit.equals("")) { mainScreen.appendjTextArea(rezultatHit); }
+                        if (!rezultatHit.equals("")) {
+                            mainScreen.appendjTextArea(rezultatHit);
+                            mainScreen.setListButtonGamer2(playerMove.getListGamer2AfterDiedShip());
+                        }
                         if (mainScreen.getListCoordinatShipsPlayer2().isEmpty()) { break; }
                         mainScreen.appendjTextArea(" ----- Ход игрока 1 -----");
                         log.info("Ход игрока 1");

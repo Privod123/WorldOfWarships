@@ -15,9 +15,10 @@ public class MainScreen {
     private ArrayList<String> listCoordinatShipsPlayer1 ;
     private ArrayList<String> listCoordinatShipsPlayer2 ;
     private JTextArea jTextArea;
-    private boolean finishHit = false; // переменная отвечает за проверку был ли совершен выстрел
-    private boolean succesHitPlayer1 = false; //флаг удачного выстрела Игрока 1
-    private String fullNameButtonSuccesHit;
+    private boolean finishHit = false;                      // переменная отвечает за проверку был ли совершен выстрел
+    private boolean succesHitPlayer1 = false;               // флаг удачного выстрела Игрока 1
+    private String fullNameButtonSuccesHit;                 // полное имя координаты с удачным выстрелом
+
 
     public boolean isFinishHit() { return finishHit; }
 
@@ -28,6 +29,10 @@ public class MainScreen {
     public List<JButton> getListButtonGamer1() { return listButtonGamer1; }
 
     public void setListButtonGamer1(List<JButton> listButtonGamer1) { this.listButtonGamer1 = listButtonGamer1; }
+
+    public List<JButton> getListButtonGamer2() { return listButtonGamer2; }
+
+    public void setListButtonGamer2(List<JButton> listButtonGamer2) { this.listButtonGamer2 = listButtonGamer2; }
 
     public ArrayList<String> getListCoordinatShipsPlayer1() {
         return listCoordinatShipsPlayer1;
@@ -93,7 +98,7 @@ public class MainScreen {
 
     /* Создание поля, где будут раставлены корабли и растановка кораблей */
 
-    public void createdField(JPanel jPanel, int numGamer){
+    private void createdField(JPanel jPanel, int numGamer){
         /* Заполняем буквы сверху поля боя */
         JPanel jPanelTopLetterrs = new JPanel();
         jPanelTopLetterrs.setLayout(new GridLayout(1,11));

@@ -1,7 +1,6 @@
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,13 +18,10 @@ public class Computer {
     private JButton jButtonRandom;
     private List<String> succesHit = new ArrayList<>(); // лист куда записываем удачные попадания
     private String messangeFromComputer = "";
+    private ImageIcon dontShut = new ImageIcon("src\\Image\\Крест.gif");
 
     public Computer() {
         this.listWhereWillBeShoot = Arrays.asList(lettersButton);
-    }
-
-    public String getMessangeFromComputer() {
-        return messangeFromComputer;
     }
 
     public List<JButton> pressButon (List<JButton> listButtonGamer1, MainScreen mainScreen){
@@ -74,7 +70,9 @@ public class Computer {
                         String newNameButton = jButtonRandom.getName().trim().substring(1,jButtonRandom.getName().length()-2);
                         // Заносим координаты удачного выстрела в лист
                         succesHit.add(newNameButton);
-                        listGamer1 = shipDied(succesHit,listButtonGamer1);
+                        // Вызываем метод shipDied из класса DontShutAroundShip
+                        // ктороый скажем компьютеру не стрелять вокруг корабля
+                        listGamer1 = DontShutAroundShip.shipDied(succesHit,listButtonGamer1);
                         // очищаем лист удачных выстрелов,так как корабль потоплен
                         succesHit.clear();
                         countShipDied++;
@@ -101,8 +99,9 @@ public class Computer {
                             countSuccesHit = 1; // ставим в начальное положение
                             log.info("Компьютер попал в корабль номер - " + countShip + " (двухпалубный). Корабль затоплен!");
                             mainScreen.appendjTextArea("Игрок 2 затопил двухпалубный корабль");
-                            // Вызываем метод ктороый скажем компьютеру не стрелять вокруг корабля
-                            listGamer1 = shipDied(succesHit,listButtonGamer1);
+                            // Вызываем метод shipDied из класса DontShutAroundShip
+                            // ктороый скажем компьютеру не стрелять вокруг корабля
+                            listGamer1 = DontShutAroundShip.shipDied(succesHit,listButtonGamer1);
                             succesHit.clear(); // чистим список удачных попаданий, так как корабль затоплен
                             countShipDied++;
                         }else {
@@ -132,8 +131,9 @@ public class Computer {
                             countSuccesHit = 1; // ставим в начальное положение
                             log.info("Компьютер попал в корабль номер - " + countShip + " (трехпалубный). Корабль затоплен!");
                             mainScreen.appendjTextArea("Игрок 2 затопил трехпалубный корабль");
-                            // Вызываем метод ктороый скажем компьютеру не стрелять вокруг корабля
-                            listGamer1 = shipDied(succesHit,listButtonGamer1);
+                            // Вызываем метод shipDied из класса DontShutAroundShip
+                            // ктороый скажем компьютеру не стрелять вокруг корабля
+                            listGamer1 = DontShutAroundShip.shipDied(succesHit,listButtonGamer1);
                             succesHit.clear(); // чистим список удачных попаданий, так как корабль затоплен
                             countShipDied++;
                         }else {
@@ -163,8 +163,9 @@ public class Computer {
                             countSuccesHit = 1; // ставим в начальное положение
                             log.info("Компьютер попал в корабль номер - " + countShip + " (четырехпалубный). Корабль затоплен!");
                             mainScreen.appendjTextArea("Игрок 2 затопил четырехпалубный корабль");
-                            // Вызываем метод ктороый скажем компьютеру не стрелять вокруг корабля
-                            listGamer1 = shipDied(succesHit,listButtonGamer1);
+                            // Вызываем метод shipDied из класса DontShutAroundShip
+                            // ктороый скажем компьютеру не стрелять вокруг корабля
+                            listGamer1 = DontShutAroundShip.shipDied(succesHit,listButtonGamer1);
                             succesHit.clear(); // чистим список удачных попаданий, так как корабль затоплен
                             countShipDied++;
                         }else {
@@ -188,89 +189,6 @@ public class Computer {
             } else {
                 continue;
             }
-        }
-        return listGamer1;
-    }
-
-    // метод shipDied говорит компьютеру не стрелять в поля вокруг затопленого корабля
-    private List<JButton> shipDied(List<String> succesHitShip, List<JButton> listGamer1){
-        int j = 0;
-        while (!succesHitShip.isEmpty()){
-            // Определяем букву куда был сделан удачный выстрел
-            String positionLetter = succesHitShip.get(j).substring(0,1);
-            // определяем цифры куда был сделат удачный выстрел
-            int numberLetterPosition = Integer.parseInt(succesHitShip.get(j).substring(1));
-
-            int numLetterShipDied = listWhereWillBeShoot.indexOf(positionLetter);
-
-            // создаем матрицы 3х3 для перебора квадратов которые надо исключить из потанциальных для стрельбы
-            int[] numLetterB = new int[3];
-            int[] numButtonB = new int[3];
-            // ------------------------ //
-            // расматриваем 3 варианта где стоял корабль по Букве
-            if (numLetterShipDied == 0){
-                numLetterB[0] = numLetterShipDied;
-                numLetterB[1] = numLetterShipDied;
-                numLetterB[2] = numLetterShipDied + 1;
-            } else if (numLetterShipDied == 9){
-                numLetterB[0] = numLetterShipDied - 1;
-                numLetterB[1] = numLetterShipDied;
-                numLetterB[2] = numLetterShipDied;
-            } else {
-                numLetterB[0] = numLetterShipDied - 1;
-                numLetterB[1] = numLetterShipDied;
-                numLetterB[2] = numLetterShipDied + 1;
-            }
-            // ------------------------ //
-            // расматриваем 3 варианта где стоял корабль по Цифре
-            if (numberLetterPosition == 1){
-                numButtonB[0] = numberLetterPosition;
-                numButtonB[1] = numberLetterPosition;
-                numButtonB[2] = numberLetterPosition + 1;
-            } else if (numberLetterPosition == 10){
-                numButtonB[0] = numberLetterPosition - 1;
-                numButtonB[1] = numberLetterPosition;
-                numButtonB[2] = numberLetterPosition;
-            } else {
-                numButtonB[0] = numberLetterPosition - 1;
-                numButtonB[1] = numberLetterPosition;
-                numButtonB[2] = numberLetterPosition + 1;
-            }
-
-            // имена квадратов которые компьютер больше стрелять не будет.
-            String nameWestNorthButton = lettersButton[numLetterB[0]] + numButtonB[0];
-            String nameNorthButton = lettersButton[numLetterB[1]] + numButtonB[0];
-            String nameEastNorthButton = lettersButton[numLetterB[2]] + numButtonB[0];
-            String nameWestButton = lettersButton[numLetterB[0]] + numButtonB[1];
-            String nameCenterButton = lettersButton[numLetterB[1]] + numButtonB[1];
-            String nameEastButton = lettersButton[numLetterB[2]] + numButtonB[1];
-            String nameWestSouthButton = lettersButton[numLetterB[0]] + numButtonB[2];
-            String nameSouthButton = lettersButton[numLetterB[1]] + numButtonB[2];
-            String nameEastSouthButton = lettersButton[numLetterB[2]] + numButtonB[2];
-
-            // перебираем все квадраты игрового поля и все совпадающие по названия поля исключает из зоны обстрела компьютера
-
-            for (int i = 0; i < listGamer1.size() ; i++) {
-                if (nameWestNorthButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameNorthButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameEastNorthButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameWestButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameCenterButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameEastButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameWestSouthButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameSouthButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-                if (nameEastSouthButton.equals(listGamer1.get(i).getName()) && listGamer1.get(i).isEnabled())
-                    listGamer1.get(i).setEnabled(false);
-            }
-            succesHitShip.remove(succesHitShip.get(j));
         }
         return listGamer1;
     }
